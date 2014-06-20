@@ -109,9 +109,17 @@ class Telescope:
     def FocusingPosition(self):
         self._MoveTab("Focus")
         self._MoveTab("Settings")
-        print controls.win32_controls.EditWrapper(telescope.app_form["TJvSpinEdit7"]).Texts()
+	return float(self.app_form["TJvSpinEdit4"].GetProperties()["Texts"][0])/10000.
         
-        
+
+    def InspectClass(self):
+        self._MoveTab("Focus")
+        self._MoveTab("Climate")
+        for i, child in enumerate(self.app_form.Children()):
+            child.CaptureAsImage().save("%s%d.jpg" \
+		% (child.FriendlyClassName(),i) )
+
+
 if __name__ == "__main__":
     import time, sys, traceback
     try:
@@ -121,7 +129,8 @@ if __name__ == "__main__":
 #        telescope.DustcoverOpen()
 #        print telescope.DustcoverStatus()
 #        telescope.DustcoverClose()
-        telescope.FocusingTargetPosition(9884)
+#        telescope.FocusingTargetPosition(9884)
+        print telescope.FocusingPosition()
         
     except:
         traceback.print_exc(file=sys.stdout)

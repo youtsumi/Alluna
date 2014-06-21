@@ -54,6 +54,13 @@ class Telescope:
         print "Then move to %s control tab" % dst
         self.tabcontrol.Select(self.tabdict[u"%s" % dst])
 
+    def _MoveSettingTab(self,dst):
+        if self.settingstabcontrol.GetSelectedTab() \
+	    == self.settingstabdict[u"%s" % dst]:
+            return
+        print "Then move to %s control tab" % dst
+        self.settingstabcontrol.Select(self.settingstabdict[u"%s" % dst])
+
     def _DustcoverControl(self,cmd):
         self._MoveTab("Dustcover")
 
@@ -107,8 +114,9 @@ class Telescope:
 
 
     def FocusingPosition(self):
-        self._MoveTab("Focus")
         self._MoveTab("Settings")
+        self._MoveSettingTab("Focuser")
+	# should do something around here to do switch tabs
 	return float(self.app_form["TJvSpinEdit4"].GetProperties()["Texts"][0])/10000.
         
 
@@ -129,7 +137,7 @@ if __name__ == "__main__":
 #        telescope.DustcoverOpen()
 #        print telescope.DustcoverStatus()
 #        telescope.DustcoverClose()
-#        telescope.FocusingTargetPosition(9884)
+        telescope.FocusingTargetPosition(9884)
         print telescope.FocusingPosition()
         
     except:

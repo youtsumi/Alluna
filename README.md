@@ -8,4 +8,7 @@ REQUIREMENT
 - python2.7 32bit version
 - pywinauto
 
+!(http://hinotori.hiroshima-u.ac.jp/logo.jpg)
+http://hinotori.hiroshima-u.ac.jp
+
 Yousuke Utsumi (youtsumi@hiroshima-u.ac.jp)

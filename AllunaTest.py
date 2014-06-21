@@ -19,6 +19,7 @@ class Telescope:
         self.app.kill_()
     
     def Connect(self):
+	"""Try to connect to the TCS software"""
         try:
             self.app = application.Application()
             self.app.connect_(path=pathtoapp)
@@ -49,12 +50,14 @@ class Telescope:
         self._WaitCompletion()
 
     def _MoveTab(self,dst):
+	"""Internal method to handle the top-layere tabs"""
         if self.tabcontrol.GetSelectedTab() == self.tabdict[u"%s" % dst]:
             return
         print "Then move to %s control tab" % dst
         self.tabcontrol.Select(self.tabdict[u"%s" % dst])
 
     def _MoveSettingTab(self,dst):
+	"""Internal method to handle the tabs in the setting tab"""
         if self.settingstabcontrol.GetSelectedTab() \
 	    == self.settingstabdict[u"%s" % dst]:
             return
@@ -62,6 +65,7 @@ class Telescope:
         self.settingstabcontrol.Select(self.settingstabdict[u"%s" % dst])
 
     def _DustcoverControl(self,cmd):
+	"""Internal method to control the mirror cover"""
         self._MoveTab("Dustcover")
 
         print "Try to %s dust cover" % cmd
@@ -78,21 +82,26 @@ class Telescope:
             print "Seems already %sed" % cmd        
 
     def DustcoverStatus(self):
+	"""Try to retrieve the mirror cover"""
         self._MoveTab("Dustcover")
         return self.app_form["Button2"].Texts()
     
     def DustcoverOpen(self):
+	"""Try to open the mirror cover"""
         self._DustcoverControl("Open")
 
     def DustcoverClose(self):
+	"""Try to close the mirror cover"""
         self._DustcoverControl("Close")
 
     def _WaitCompletion(self):
+	"""Waits to completion of something to do"""
         while self.buttonconnect.IsEnabled() != True:
             print "wait for 1 seconds"
             time.sleep(1)
         
     def FocusingTargetPosition(self,target):
+	"""Try to make the focuser to be at desired position in terms of the counter"""
         self._MoveTab("Focus")
         
         zpos=controls.win32_controls.EditWrapper(self.app_form["TJvSpinEdit17"])
@@ -103,6 +112,7 @@ class Telescope:
         self._WaitCompletion()
 
     def FocusingHomePosition(self):
+	"""Try to make the focuser to be at the home position"""
         self._MoveTab("Focus")
         self.app_form["GoToStatic"]
         nominalbutton = controls.win32_controls.ButtonWrapper(self.app_form["GoToStatic"])
@@ -114,9 +124,9 @@ class Telescope:
 
 
     def FocusingPosition(self):
+	"""Returns the current focuser's position"""
         self._MoveTab("Settings")
         self._MoveSettingTab("Focuser")
-	# should do something around here to do switch tabs
 	return float(self.app_form["TJvSpinEdit4"].GetProperties()["Texts"][0])/10000.
         
 
